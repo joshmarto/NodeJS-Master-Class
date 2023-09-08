@@ -11,14 +11,15 @@ const StringDecoder = require('string_decoder').StringDecoder;
 const config = require('./config');
 const fs = require('fs');
 
+
 // Instantiate the HTTP server
 const httpServer = http.createServer( (req, res) => {
     unifiedServer(req, res);
 });
 
 // Start the HTTP server
-httpServer.listen(config.httpsPort, () => {
-    console.log(`The http  server is listening on port ${config.httpsPort} now in ${config.envName} mode`);
+httpServer.listen(config.httpPort, () => {
+    console.log(`The http  server is listening on port ${config.httpPort} now in ${config.envName} mode`);
 });
 
 // Instantiate the HTTPS server
@@ -31,8 +32,8 @@ const httpsServer = https.createServer(httpsServerOptions, (req, res) => {
 });
 
 // Start the HTTPS server
-httpsServer.listen(config.httpPort, () => {
-    console.log(`The https server is listening on port ${config.httpPort} now in ${config.envName} mode`);
+httpsServer.listen(config.httpsPort, () => {
+    console.log(`The https server is listening on port ${config.httpsPort} now in ${config.envName} mode`);
 });
 
 // All the server logic for both the http and https server
@@ -102,10 +103,9 @@ const unifiedServer = (req, res) => {
 // Define the handlers
 const handlers = {};
 
-// Sample hander
-handlers.sample = (data, callback) => {
-    // Callback a http status code, and a payload object
-    callback(406, {'name': 'sample handler'});
+// Ping handler
+handlers.ping = (data, callback) => {
+    callback(200);
 };
 
 // Not found handler
@@ -115,5 +115,5 @@ handlers.notFound = (data, callback) => {
 
 // Define a request router
 const router = {
-    'sample': handlers.sample,
+    'ping': handlers.ping,
 };
